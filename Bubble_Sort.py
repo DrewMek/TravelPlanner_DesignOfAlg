@@ -1,16 +1,21 @@
-import re
+import time
+import ast
+
+def bubble_sort(arr):
+    return arr
+
+def selection_sort(arr):
+     return arr
 
 # Process flights.txt
-print("Flights:")
+def flight_sorting():
+    try:
+            with open('flights.txt', 'r') as f:
+                lines = f.readlines()
+    except FileNotFoundError:
+            print("Error: 'flights.txt' not found in the current directory.")
+            return
 
-try:
-    with open('flights.txt', 'r') as file:
-        for line in file:
-            flights = re.findall(r'\([^()]*\)', line)
-            for flight in flights:
-                print(flight)
-except FileNotFoundError:
-    print("Error: flights.txt not found.")
 
 print("\n")  # spacing
 
@@ -27,8 +32,8 @@ except FileNotFoundError:
 
 
 # Example: writing to a file
-output_filename = "FtimeBubSort.txt"
+# output_filename = "FtimeBubSort.txt"
 
-with open(output_filename, 'w') as f:
-    f.write("This is the first line.\n")
-    f.write("This is the second line.\n")
+# with open(output_filename, 'w') as f:
+#     f.write("This is the first line.\n")
+#     f.write("This is the second line.\n")
