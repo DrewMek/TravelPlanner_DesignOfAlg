@@ -2,6 +2,8 @@ import time
 import ast
 import matplotlib.pyplot as plt
 
+#Credit statment: Oliver Conley, Dre Meketi, Ty Madsen
+
 def bubble_sort(arr):
     n = len(arr)
     for i in range(n):
@@ -91,20 +93,6 @@ def flight_sorting():
 
     plt.savefig("runtime_plot.png")
     plt.show()
-
-
-print("\n")  # spacing
-
-
-# # Process cities.txt
-# print("Cities:\n")
-
-# try:
-#     with open('cities.txt', 'r') as file:
-#         for line in file:
-#             print(line.strip())
-# except FileNotFoundError:
-#     print("Error: cities.txt not found.")
 
 if __name__ == "__main__":
     flight_sorting()
