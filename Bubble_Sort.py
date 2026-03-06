@@ -5,7 +5,7 @@ def bubble_sort(arr):
     n = len(arr)
     for i in range(n):
          for j in range(0, n-1-i):
-              if arr[j] > arr[j+1]:
+              if arr[j][1] > arr[j+1][1]:
                 arr[j], arr[j+1] = arr[j+1],arr[j]
     return arr
 
@@ -14,7 +14,7 @@ def selection_sort(arr):
     for i in range(n):
         min_idx = i
         for j in range(i + 1, n):
-            if arr[j] < arr[min_idx]: 
+            if arr[j][1] < arr[min_idx][1]: 
                 min_idx = j
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
     return arr
@@ -27,8 +27,10 @@ def flight_sorting():
     except FileNotFoundError:
             print("Error: 'flights.txt' not found in the current directory.")
             return
-    bublesort_results = []
+    
+    bubblesort_results = []
     selectionsort_results = []
+    
     runtime = []
     for line in lines:
         line = line.strip()
@@ -54,38 +56,28 @@ def flight_sorting():
         selection_time = time.perf_counter_ns() - start_selection
 
         #Results
-        bubble_sort.append(data_bubble)
-        selection_sort.append(data_selection)
+        bubblesort_results.append(data_bubble)
+        selectionsort_results.append(data_selection)
         runtime.append((bubble_time, selection_time))
 
         #print_to_file
-    with open("FtimeBubSort.txt", 'w') as f:
-         for i in range(len(bubble_sort)):
-              
+    with open("FtimeBubSort.txt", "w") as f:
+            for line in bubblesort_results:
+                pairs = [(item[0], item[1]) for item in line]
+                f.write(str(pairs) + "\n")
 
-print("\n")  # spacing
+    with open("FtimeSelSort.txt", "w") as f:
+            for line in selectionsort_results:
+                pairs = [(item[0], item[1]) for item in line]
+                f.write(str(pairs) + "\n")
+
+    with open("runtimes.txt", "w") as f:
+            for bub, sel in runtime:
+                f.write(f"({bub}, {sel})\n")
 
 
-# # Process cities.txt
-# print("Cities:\n")
 
-# try:
-#     with open('cities.txt', 'r') as file:
-#         for line in file:
-#             print(line.strip())
-# except FileNotFoundError:
-#     print("Error: cities.txt not found.")
 
 if __name__ == "__main__":
      
-    # print( bubble_sort([64, 34, 25, 12, 22, 11, 90]) )
-
-    # print("\n")  # spacing
-    # print("Selection Sort:\n")
-    # print( selection_sort([64, 25, 12, 22, 11, 34, 90]) )
-# Example: writing to a file
-# output_filename = "FtimeBubSort.txt"
-
-# with open(output_filename, 'w') as f:
-#     f.write("This is the first line.\n")
-#     f.write("This is the second line.\n")
+    flight_sorting()
