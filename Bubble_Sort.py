@@ -2,9 +2,21 @@ import time
 import ast
 
 def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+         for j in range(0, n-1-i):
+              if arr[j] > arr[j+1]:
+                   arr[j], arr[j+1] = arr[j+1],arr[j]
     return arr
 
 def selection_sort(arr):
+     n = len(arr)
+     for i in range(n):
+          min_idx = i
+          for j in range(i+1, n):
+               if arr[j]< arr[min_idx]:
+                    min_idx = j
+                    arr[i], arr[min_idx] = arr[min_idx], arr[i]
      return arr
 
 # Process flights.txt
@@ -30,7 +42,8 @@ try:
 except FileNotFoundError:
     print("Error: cities.txt not found.")
 
-
+print( bubble_sort([64, 34, 25, 12, 22, 11, 90]) )
+print( selection_sort([64, 25, 12, 22, 11]) )
 # Example: writing to a file
 # output_filename = "FtimeBubSort.txt"
 
