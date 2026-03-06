@@ -4,21 +4,26 @@ import matplotlib.pyplot as plt
 
 def bubble_sort(arr):
     n = len(arr)
+    swaps = 0
     for i in range(n):
          for j in range(0, n-1-i):
               if arr[j][1] > arr[j+1][1]:
                 arr[j], arr[j+1] = arr[j+1],arr[j]
-    return arr
+                swaps = swaps + 1
+    return arr, swaps
 
 def selection_sort(arr):
     n = len(arr)
+    swaps = 0
     for i in range(n):
         min_idx = i
         for j in range(i + 1, n):
             if arr[j][1] < arr[min_idx][1]:
                 min_idx = j
-        arr[i], arr[min_idx] = arr[min_idx], arr[i]
-    return arr
+        if min_idx != i:
+            arr[i], arr[min_idx] = arr[min_idx], arr[i]
+            swaps += 1
+    return arr, swaps
 
 # Process flights.txt
 def flight_sorting():
@@ -32,6 +37,8 @@ def flight_sorting():
     selectionsort_results = []
     BubTime = []
     SelTime = []
+    bubble_swaps = []
+    selection_swaps = []
 
     for line in lines:
         line = line.strip()
@@ -47,18 +54,21 @@ def flight_sorting():
         # Bubble Sort
         data_bubble = original_list.copy()
         start = time.perf_counter_ns()
-        bubble_sort(data_bubble)
+
+        data_bubble, bubble_swaps_i = bubble_sort(data_bubble)
+
         BubTime_i = time.perf_counter_ns() - start
 
         # Selection Sort
         data_selection = original_list.copy()
         start = time.perf_counter_ns()
-        selection_sort(data_selection)
+        data_selection, selection_swaps_i = selection_sort(data_selection)
         SelTime_i = time.perf_counter_ns() - start
 
         bubblesort_results.append(data_bubble)
         selectionsort_results.append(data_selection)
-
+        bubble_swaps.append(bubble_swaps_i)
+        selection_swaps.append(selection_swaps_i)
         BubTime.append(BubTime_i)
         SelTime.append(SelTime_i)
 
@@ -92,9 +102,12 @@ def flight_sorting():
     plt.savefig("runtime_plot.png")
     plt.show()
 
+    print("Bubble Sort Swaps Per City:")
+    for i, swaps in enumerate(bubble_swaps, start=1):
+        print(f"City {i}: {swaps}")
 
-print("\n")  # spacing
-
+    print("Total Bubble Sort Swaps:", sum(bubble_swaps))
+    print("Total Selection Sort Swaps:", sum(selection_swaps))
 
 # # Process cities.txt
 # print("Cities:\n")
