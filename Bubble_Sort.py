@@ -19,6 +19,7 @@ def selection_sort(arr):
                 min_idx = j
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
     return arr
+
 # Process flights.txt
 def flight_sorting():
     try:
