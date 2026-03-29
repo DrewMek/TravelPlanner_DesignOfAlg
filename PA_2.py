@@ -158,5 +158,5 @@ for idx, line in enumerate(lines):
 
     plt.legend()
 
-    plt.savefig("runtime_plot.png")
+    plt.savefig("PA_2_runtime_plot.png")
     plt.show()
