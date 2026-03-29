@@ -85,7 +85,7 @@ B = 5000
 trip_numbers = []
 
 #using the sorted lists to find the trips that are under the budget
-for city_list in sorted_lists["merge"]:
+for city_list in sorted_files["merge"]:
     total_cost = 0
     count = 0
 
