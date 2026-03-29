@@ -145,9 +145,9 @@ for idx, line in enumerate(lines):
 
     x = list(range(1, len(merge_sort) + 1))
     #simply plots times against each run of bubble and selection sort
-    plt.plot(x, MergeTime, label="Merge Sort")
-    plt.plot(x, LomutoTime, label="Quick Sort Lomuto")
-    plt.plot(x, HoareTime, label="Quick Sort Hoare")
+    plt.plot(x, merge_time, label="Merge Sort")
+    plt.plot(x, lomuto_time, label="Quick Sort Lomuto")
+    plt.plot(x, hoare_time, label="Quick Sort Hoare")
 
     #not part of data, just naming
     plt.xlabel("City Index (Line Number)")
