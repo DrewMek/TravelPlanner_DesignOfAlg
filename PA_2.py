@@ -80,6 +80,28 @@ sorted_files = {
 with open("round2_output.txt", "w") as f:
     lines = f.readlines()
 
+#Trips with budget of 5000
+B = 5000
+trip_numbers = []
+
+#using the sorted lists to find the trips that are under the budget
+for city_list in sorted_lists["merge"]:
+    total_cost = 0
+    count = 0
+
+    for city, cost in city_list:
+        if total_cost + cost <= B:
+            total_cost += cost
+            count += 1
+        else:
+            break
+    trip_numbers.append(count)
+
+#write the trip numbers to file
+with open("trip_numbers.txt", "w") as f:
+    for num in trip_numbers:
+        f.write(str(num) + "\n")
+
 #stored sorted data
 sorted_lists = {"merge": [], "lomuto": [], "hoare": []}
 runtime = []
@@ -91,7 +113,7 @@ for idx, line in enumerate(lines):
     cities = [(int(pairs[i]), float(pairs[i + 1])) for i in range(0, len(pairs), 2)]
 
     #merge sort time
-    start = time.time_ns
+    start = time.time_ns()
     merge_sorted = merge_sort(cities)
     merge_time = time.time_ns() - start
     sorted_lists["merge"].append(merge_sorted)
