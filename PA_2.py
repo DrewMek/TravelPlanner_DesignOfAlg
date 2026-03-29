@@ -1,6 +1,8 @@
 import time
 import matplotlib.pyplot as plt
 
+#Oliver Conley, Drew Meketi, and Ty Madsen
+
 # Merge Sort
 def merge_sort(arr):
     if len(arr) <= 1:
