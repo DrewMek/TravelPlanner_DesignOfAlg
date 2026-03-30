@@ -16,6 +16,7 @@ def merge_sort(arr):
     right = merge_sort(arr[mid:])
     return merge(left, right)
 
+# Merge function for Merge Sort
 def merge(left, right):
     result = []
     i = j = 0
@@ -54,6 +55,8 @@ def quick_sort_Hoare(arr, low, high):
             p = partition(arr, low, high)
             qsort(arr, low, p)
             qsort(arr, p + 1, high)
+   
+    # Partition function for Hoare
     def partition(arr, low, high):
         pivot = arr[low][1]
         i = low - 1
@@ -160,5 +163,3 @@ plt.legend()
 plt.savefig("PA_2_runtime_plot.png")
 plt.show()
 """
-if __name__ == "__main__":
-    print("round2_output.txt")
