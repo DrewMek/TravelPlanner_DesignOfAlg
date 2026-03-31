@@ -142,20 +142,43 @@ with open("trip_nums.txt", "w") as f:
 with open("PA_2_runtime.txt", "w") as f:
     for mer, lom, hoa in runtime:
         f.write(f"({mer}, {lom}, {hoa})\n")
-"""
+
+
 x = list(range(1, len(runtime) + 1))
-#simply plots times against each run of bubble and selection sort
-plt.plot(x, merge_time, label="Merge Sort")
-plt.plot(x, lomuto_time, label="Quick Sort Lomuto")
-plt.plot(x, hoare_time, label="Quick Sort Hoare")
 
-#not part of data, just naming
-plt.xlabel("City Index (Line Number)")
+merge_times = [r[0] for r in runtime] #these just grab the times from each individual method so we can plot them properly
+lomuto_times = [r[1] for r in runtime]
+hoare_times = [r[2] for r in runtime]
+
+plt.figure(figsize=(10, 6)) #makes a figure
+plt.plot(x, merge_times, marker='o', label="Merge Sort") #plots based on whats in the list
+plt.plot(x, lomuto_times, marker='s', label="Quick Sort Lomuto")
+plt.plot(x, hoare_times, marker='^', label="Quick Sort Hoare")
+
+plt.xlabel("City Index (Line Number)") #labeling the plot and organizing it
 plt.ylabel("Runtime (nanoseconds)")
-plt.title("Sorting Runtime")
-
+plt.title("Sorting Runtime by City List")
 plt.legend()
-
+plt.grid(True)
+plt.tight_layout()
 plt.savefig("PA_2_runtime_plot.png")
 plt.show()
-"""
+
+#its kinda ugly so ill make it a bar chart
+avg_merge = sum(merge_times) / len(merge_times)
+avg_lomuto = sum(lomuto_times) / len(lomuto_times)
+avg_hoare = sum(hoare_times) / len(hoare_times)
+
+algorithms = ["Merge Sort", "Quick Sort Lomuto", "Quick Sort Hoare"]
+averages = [avg_merge, avg_lomuto, avg_hoare]
+
+plt.figure(figsize=(8, 5))
+plt.bar(algorithms, averages)
+
+plt.xlabel("Algorithm")
+plt.ylabel("Average Runtime (nanoseconds)")
+plt.title("Average Sorting Runtime")
+plt.tight_layout()
+plt.savefig("PA_2_avg_runtime_bar.png")
+plt.show()
+#way cleaner bar chart.  curious how hoare is slower, though.  is the implementation correct?
