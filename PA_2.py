@@ -32,6 +32,8 @@ def quick_sort_Lomuto(arr, low, high):
             p = partition(arr, low, high)
             qsort(arr, low, p - 1)
             qsort(arr, p + 1, high)
+            
+    # Partition function for Lomuto
     def partition(arr, low, high):
         pivot = arr[high][1]
         i = low - 1
@@ -51,7 +53,7 @@ def quick_sort_Hoare(arr, low, high):
             p = partition(arr, low, high)
             qsort(arr, low, p)
             qsort(arr, p + 1, high)
-   
+
     # Partition function for Hoare
     def partition(arr, low, high):
         pivot = arr[low][1]
