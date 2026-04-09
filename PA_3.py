@@ -104,8 +104,8 @@ def main():
     # extra credit: plot runtimes
 x = list(range(50, 100))
 
-bf_times = [r[0] for r in runtime] #these just grab the times from each individual method so we can plot them properly
-dc_times = [r[1] for r in runtime]
+bf_times = [r[0] for r in PA_3_runtime] #these just grab the times from each individual method so we can plot them properly
+dc_times = [r[1] for r in PA_3_runtime]
 
 plt.figure(figsize=(10, 6)) #makes a figure
 plt.plot(x, bf_times, marker='o', label="Brute Force") #plots based on whats in the list
@@ -113,7 +113,7 @@ plt.plot(x, dc_times, marker='s', label="Divide & Conquer")
 
 plt.xlabel("City Index (Line Number)") #labeling the plot and organizing it
 plt.ylabel("Runtime (nanoseconds)")
-plt.title("Sorting Runtime by City List")
+plt.title("Closest Pair Runtime Comparison")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
@@ -132,7 +132,7 @@ plt.bar(algorithms, averages)
 
 plt.xlabel("Algorithm")
 plt.ylabel("Average Runtime (nanoseconds)")
-plt.title("Average Sorting Runtime")
+plt.title("Average Closest Pair Runtime")
 plt.tight_layout()
 plt.savefig("PA_3_avg_runtime_bar.png")
 plt.show()
