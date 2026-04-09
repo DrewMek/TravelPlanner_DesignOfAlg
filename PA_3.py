@@ -65,7 +65,7 @@ def main():
 
     bf_file = open("BF-Closest.txt", "w")
     dc_file = open("DC-Closest.txt", "w")
-    time_file = open("runtimes.txt", "w")
+    time_file = open("PA_3_runtimes.txt", "w")
 
     bf_times = []
     dc_times = []
