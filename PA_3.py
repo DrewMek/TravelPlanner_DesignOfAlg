@@ -102,10 +102,42 @@ def main():
     time_file.close()
 
     # extra credit: plot runtimes
-    plt.figure()
+x = list(range(50, 100))
 
-    
-    plt.show()
+merge_times = [r[0] for r in runtime] #these just grab the times from each individual method so we can plot them properly
+lomuto_times = [r[1] for r in runtime]
+hoare_times = [r[2] for r in runtime]
+
+plt.figure(figsize=(10, 6)) #makes a figure
+plt.plot(x, bf_times, marker='o', label="Brute Force") #plots based on whats in the list
+plt.plot(x, dc_times, marker='s', label="Divide & Conquer")
+
+plt.xlabel("City Index (Line Number)") #labeling the plot and organizing it
+plt.ylabel("Runtime (nanoseconds)")
+plt.title("Sorting Runtime by City List")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("PA_3_runtime_plot.png")
+plt.show()
+
+#its kinda ugly so ill make it a bar chart
+avg_bf = sum(bf_times) / len(bf_times)
+avg_dc = sum(dc_times) / len(dc_times)
+
+algorithms = ["Brute Force", "Divide & Conquer"]
+averages = [avg_bf, avg_dc]
+
+plt.figure(figsize=(8, 5))
+plt.bar(algorithms, averages)
+
+plt.xlabel("Algorithm")
+plt.ylabel("Average Runtime (nanoseconds)")
+plt.title("Average Sorting Runtime")
+plt.tight_layout()
+plt.savefig("PA_3_avg_runtime_bar.png")
+plt.show()
+#way cleaner bar chart.  curious how hoare is slower, though.  is the implementation correct?
 
 
 main()
