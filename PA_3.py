@@ -1,110 +1,111 @@
 #Oliver Conley, Drew Meketi, and Ty Madsen
+import math
 import time
 import matplotlib.pyplot as plt
 
-# Distance function to calculate the distance between two points
+# Distance function
 def distance(p1, p2):
-    return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** 0.5
+    return math.sqrt((p1[1] - p2[1])**2 + (p1[2] - p2[2])**2)
 
-#brute force algorithm to find the closest pair of points
+# Brute Force
 def brute_force(points):
-    
     min_dist = float('inf')
-    
-    closest_pair = None
-    
+    best_pair = None
+
     for i in range(len(points)):
         for j in range(i + 1, len(points)):
-            dist = distance(points[i], points[j])
-            if dist < min_dist:
-                min_dist = dist
-                closest_pair = (points[i], points[j])
-    
-    return closest_pair, min_dist
+            d = distance(points[i], points[j])
+            if d < min_dist:
+                min_dist = d
+                best_pair = (points[i], points[j])
 
-#Divide and conquer algorithm to find the closest pair of points
-def closest_pair(points):
-   
-    if len(points) <= 3:
+    return best_pair, min_dist
+
+# Divide & Conquer
+def closest_rec(points):
+    n = len(points)
+
+    if n <= 3:
         return brute_force(points)
-    
-    mid = len(points) // 2 
-    left_half = points[:mid] 
-    right_half = points[mid:]
 
-    (p1, q1), left_dist = closest_pair(left_half) 
-    (p2, q2), right_dist = closest_pair(right_half)
+    mid = n // 2
+    mid_x = points[mid][1]
+
+    left_pair, left_dist = closest_rec(points[:mid])
+    right_pair, right_dist = closest_rec(points[mid:])
 
     if left_dist < right_dist:
-        min_dist = left_dist
-        closest_pair = (p1, q1)
+        d = left_dist
+        best_pair = left_pair
     else:
-        min_dist = right_dist
-        closest_pair = (p2, q2)
+        d = right_dist
+        best_pair = right_pair
 
-    mid_x = points[mid][0]
-    
-    # Create a strip of points within min_dist of the midline
-    strip = [point for point in points if abs(point[0] - mid_x) < min_dist]
-    strip.sort(key=lambda point: point[1])
+    strip = [p for p in points if abs(p[1] - mid_x) < d]
+    strip.sort(key=lambda x: x[2])
 
-    # Check the strip for closer pairs
     for i in range(len(strip)):
-        for j in range(i + 1, min(i + 7, len(strip))):
+        for j in range(i+1, min(i+7, len(strip))):
             dist = distance(strip[i], strip[j])
-            if dist < min_dist:
-                min_dist = dist
-                closest_pair = (strip[i], strip[j])
+            if dist < d:
+                d = dist
+                best_pair = (strip[i], strip[j])
 
-    return closest_pair, min_dist
+    return best_pair, d
 
+# MAIN
 def main():
-    #read cities file
+
+    # Read file
     cities = []
-    with open('cities.txt', 'r') as file:
-        for line in file:
-            name, x, y = line.strip().split()
-            cities.append((name, float(x), float(y)))
+    with open("cities.txt") as f:
+        for line in f:
+            cid, x, y = line.split()
+            cities.append((int(cid), float(x), float(y)))
 
-    # Sort cities by x-coordinate
-    cities.sort(key=lambda city: city[1])
-
-    # Find the closest pair of cities
-    closest_pair, min_dist = closest_pair(cities)
-
-    print(f"Closest pair: {closest_pair[0][0]} and {closest_pair[1][0]}")
-    print(f"Distance: {min_dist}")
-
-    #output files
     bf_file = open("BF-Closest.txt", "w")
     dc_file = open("DC-Closest.txt", "w")
-    time_file = open("runtime.txt", "w")
+    time_file = open("runtimes.txt", "w")
+
+    bf_times = []
+    dc_times = []
 
     for i in range(50, 101):
-        
-        #brute force time
-        start_time = time.time()
-        brute_force(cities[:i])
-        bf_time = time.time() - start_time
 
-        #divide and conquer time
-        start_time = time.time()
-        closest_pair(cities[:i])
-        dc_time = time.time() - start_time
+        subset = cities[:i]
 
-        #write times to file
-        bf_file.write(f"{i} {bf_time}\n")
-        dc_file.write(f"{i} {dc_time}\n")
-        time_file.write(f"{i} {bf_time} {dc_time}\n")
+        # Brute Force time
+        start = time.perf_counter_ns()
+        pair_bf, dist_bf = brute_force(subset)
+        bf_time = time.perf_counter_ns() - start
 
-    #close files
+        # Divide & Conquer time
+        subset_sorted = sorted(subset, key=lambda x: x[1])
+
+        start = time.perf_counter_ns()
+        pair_dc, dist_dc = closest_rec(subset_sorted)
+        dc_time = time.perf_counter_ns() - start
+
+
+        # Write outputs
+        bf_file.write(f"{pair_bf[0][0]}, {pair_bf[1][0]}, {dist_bf}\n")
+        dc_file.write(f"{pair_dc[0][0]}, {pair_dc[1][0]}, {dist_dc}\n")
+        time_file.write(f"{bf_time}, {dc_time}\n")
+
+        bf_times.append(bf_time)
+        dc_times.append(dc_time)
+
+        print(f"Finished i = {i}")
+
     bf_file.close()
     dc_file.close()
     time_file.close()
 
-    #plotting the results on a graph
+    # extra credit: plot runtimes
+    plt.figure()
+
     
+    plt.show()
 
 
-if __name__ == "__main__":
-    main()
+main()
