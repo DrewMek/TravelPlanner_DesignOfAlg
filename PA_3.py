@@ -104,9 +104,8 @@ def main():
     # extra credit: plot runtimes
 x = list(range(50, 100))
 
-merge_times = [r[0] for r in runtime] #these just grab the times from each individual method so we can plot them properly
-lomuto_times = [r[1] for r in runtime]
-hoare_times = [r[2] for r in runtime]
+bf_times = [r[0] for r in runtime] #these just grab the times from each individual method so we can plot them properly
+dc_times = [r[1] for r in runtime]
 
 plt.figure(figsize=(10, 6)) #makes a figure
 plt.plot(x, bf_times, marker='o', label="Brute Force") #plots based on whats in the list
