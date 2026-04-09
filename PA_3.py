@@ -102,7 +102,7 @@ def main():
     time_file.close()
 
     # extra credit: plot runtimes
-x = list(range(50, 100))
+x = list(range(50, 101))
 
 bf_times = [r[0] for r in PA_3_runtime] #these just grab the times from each individual method so we can plot them properly
 dc_times = [r[1] for r in PA_3_runtime]
