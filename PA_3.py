@@ -5,13 +5,17 @@ import matplotlib.pyplot as plt
 
 # function to compute distance
 def distance(p1, p2):
+    # distance between two points p1 and p2, where p1 and p2 are tuples (id, x, y)
     return math.sqrt((p1[1] - p2[1])**2 + (p1[2] - p2[2])**2)
 
 # Brute Force
 def brute_force(points):
+
+    #find the closest pair by checking all pairs
     min_dist = float('inf')
     pair = None
     
+    # check all pairs
     for i in range(len(points)):
         for j in range(i + 1, len(points)):
             d = distance(points[i], points[j])
@@ -25,15 +29,19 @@ def brute_force(points):
 def closest_rec(points):
     n = len(points)
 
+    # base case
     if n <= 3:
         return brute_force(points)
 
+    # find the midpoint
     mid = n // 2
     mid_x = points[mid][1]
 
+    # recursively find closest pairs in left and right halves
     left_pair, left_dist = closest_rec(points[:mid])
     right_pair, right_dist = closest_rec(points[mid:])
 
+    # find the closer of the two pairs
     if left_dist < right_dist:
         d = left_dist
         best_pair = left_pair
@@ -41,9 +49,11 @@ def closest_rec(points):
         d = right_dist
         best_pair = right_pair
 
+    # check the strip around the midpoint
     strip = [p for p in points if abs(p[1] - mid_x) < d]
     strip.sort(key=lambda x: x[2])
 
+    # check pairs in the strip
     for i in range(len(strip)):
         for j in range(i+1, min(i+7, len(strip))):
             dist = distance(strip[i], strip[j])
@@ -63,10 +73,12 @@ def main():
             cid, x, y = line.split()
             cities.append((int(cid), float(x), float(y)))
 
+    # Open output files
     bf_file = open("BF-Closest.txt", "w")
     dc_file = open("DC-Closest.txt", "w")
     time_file = open("PA_3_runtimes.txt", "w")
 
+    # Lists to store runtimes for plotting
     bf_times = []
     dc_times = []
 
@@ -81,7 +93,6 @@ def main():
 
         # Divide & Conquer time
         subset_sorted = sorted(subset, key=lambda x: x[1])
-
         start = time.perf_counter_ns()
         pair_dc, dist_dc = closest_rec(subset_sorted)
         dc_time = time.perf_counter_ns() - start
@@ -92,11 +103,13 @@ def main():
         dc_file.write(f"{pair_dc[0][0]}, {pair_dc[1][0]}, {dist_dc}\n")
         time_file.write(f"{bf_time}, {dc_time}\n")
 
+        # Store runtimes for plotting
         bf_times.append(bf_time)
         dc_times.append(dc_time)
 
         print(f" i = {i}")
-
+    
+    # Close files
     bf_file.close()
     dc_file.close()
     time_file.close()
@@ -106,7 +119,6 @@ def main():
     plt.figure()
     plt.plot(x, bf_times, label="Brute Force")
     plt.plot(x, dc_times, label="Divide & Conquer")
-    #plt.plot(x, h_times,  label="Hilbert Window")
     plt.xlabel("Number of Cities")
     plt.ylabel("Runtime (nanoseconds)")
     plt.title("Closest Pair Runtime Comparison")
