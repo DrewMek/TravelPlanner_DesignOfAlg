@@ -3,25 +3,25 @@ import math
 import time
 import matplotlib.pyplot as plt
 
-# Distance function
+# function to compute distance
 def distance(p1, p2):
     return math.sqrt((p1[1] - p2[1])**2 + (p1[2] - p2[2])**2)
 
 # Brute Force
 def brute_force(points):
     min_dist = float('inf')
-    best_pair = None
-
+    pair = None
+    
     for i in range(len(points)):
         for j in range(i + 1, len(points)):
             d = distance(points[i], points[j])
             if d < min_dist:
                 min_dist = d
-                best_pair = (points[i], points[j])
+                pair = (points[i], points[j])
 
-    return best_pair, min_dist
+    return pair, min_dist
 
-# Divide & Conquer
+# divide and conquer method
 def closest_rec(points):
     n = len(points)
 
@@ -53,7 +53,7 @@ def closest_rec(points):
 
     return best_pair, d
 
-# MAIN
+# Main
 def main():
 
     # Read file
@@ -95,7 +95,7 @@ def main():
         bf_times.append(bf_time)
         dc_times.append(dc_time)
 
-        print(f"Finished i = {i}")
+        print(f" i = {i}")
 
     bf_file.close()
     dc_file.close()
