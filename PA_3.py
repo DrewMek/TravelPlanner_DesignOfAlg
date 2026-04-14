@@ -1,5 +1,4 @@
-#Oliver Conley, Drew Meketi, and Ty Madsen
-import math
+#We, Oliver Conley, Drew Meketi, and Ty Madsen, only worked within our group and received no external help.
 import time
 import matplotlib.pyplot as plt
 
