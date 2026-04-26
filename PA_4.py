@@ -91,11 +91,15 @@ def compute_all_min_stops(graph):
 
     # BFS for each city
     for i in range(1, 101):
+
+        # Get parent mapping from BFS for city i
         parent = bfs_all_paths(graph, i)  # ONE BFS per i
         row = []
 
         # reconstruct paths to all other cities
         for j in range(1, 101):
+
+            # Only compute path if i and j are different
             if i != j:
                 path = get_path(parent, i, j)
                 row.append(path)
