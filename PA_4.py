@@ -56,8 +56,8 @@ def bfs_all_paths(graph, start):
     while queue:
         current = queue.popleft()
 
-        # Explore neighbors
-        for neighbor in graph[current]:
+        # Explore neighbors of the current city
+        for neighbor, time, cost in graph[current]:
 
             # If neighbor hasn't been visited, add to queue and mark parent
             if neighbor not in visited:
