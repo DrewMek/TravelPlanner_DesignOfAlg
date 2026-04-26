@@ -29,7 +29,9 @@ def load_flights(filename):
         # Each edge is a tuple (destination, distance), we only care about the destination
         for edge in edges:
             dest = edge[0]
-            neighbors.append(dest)
+            time = edge[1]  # time is not used in BFS, but we can keep it for reference
+            cost = edge[2]  # cost is not used in BFS, but we can keep it for reference 
+            neighbors.append((dest, time, cost))  # Store the neighbor with time and cost for potential future use  
 
         # Store the neighbors in the graph
         graph[i + 1] = neighbors  
