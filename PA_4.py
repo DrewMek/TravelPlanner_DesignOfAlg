@@ -67,6 +67,67 @@ def bfs_all_paths(graph, start):
 
     return parent
 
+def cheapest_path(graph, start):
+    # Priority queue for Dijkstra's algorithm
+    queue = []
+    queue.append((0, start))  # (cost, city)
+
+    # Dictionary to track the minimum cost to reach each city
+    min_cost = {city: float('inf') for city in graph}
+    min_cost[start] = 0
+
+    parent = {}
+
+    while queue:
+        current_cost, current_city = queue.pop(0)
+
+        # If we have already found a cheaper path to current_city, skip
+        if current_cost > min_cost[current_city]:
+            continue
+
+        # Explore neighbors of the current city
+        for neighbor, time, cost in graph[current_city]:
+
+            new_cost = current_cost + cost
+
+            # If a cheaper path to neighbor is found
+            if new_cost < min_cost[neighbor]:
+                min_cost[neighbor] = new_cost
+                parent[neighbor] = current_city
+                queue.append((new_cost, neighbor))
+
+    return parent
+
+def fastest_path(graph, start):
+    # Priority queue for Dijkstra's algorithm
+    queue = []
+    queue.append((0, start))  # (time, city)
+
+    # Dictionary to track the minimum time to reach each city
+    min_time = {city: float('inf') for city in graph}
+    min_time[start] = 0
+
+    parent = {}
+
+    while queue:
+        current_time, current_city = queue.pop(0)
+
+        # If we have already found a faster path to current_city, skip
+        if current_time > min_time[current_city]:
+            continue
+
+        # Explore neighbors of the current city
+        for neighbor, time, cost in graph[current_city]:
+
+            new_time = current_time + time
+
+            # If a faster path to neighbor is found
+            if new_time < min_time[neighbor]:
+                min_time[neighbor] = new_time
+                parent[neighbor] = current_city
+                queue.append((new_time, neighbor))
+
+    return parent
 
 # Making path from start to end using parent mapping
 def get_path(parent, start, end):
@@ -109,7 +170,6 @@ def compute_all_min_stops(graph):
         result.append(row)
 
     return result
-
 
 # Output function
 def write_output(data, filename):
