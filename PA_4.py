@@ -23,18 +23,15 @@ def load_flights(filename):
         # Safely evaluate the line to get the list of edges
         edges = eval(line)
 
-        # Extract neighbors for the current city
+        # Extract neighbors for the current city, storing full dest time cost tuples
         neighbors = []
 
-        # Each edge is a tuple (destination, distance), we only care about the destination
         for edge in edges:
-            dest = edge[0]
-            time = edge[1]  # time is not used in BFS, but we can keep it for reference
-            cost = edge[2]  # cost is not used in BFS, but we can keep it for reference 
-            neighbors.append((dest, time, cost))  # Store the neighbor with time and cost for potential future use  
+            dest, time, cost = edge[0], edge[1], edge[2]
+            neighbors.append((dest, time, cost))
 
         # Store the neighbors in the graph
-        graph[i + 1] = neighbors  
+        graph[i + 1] = neighbors
 
     return graph
 
@@ -56,7 +53,7 @@ def bfs_all_paths(graph, start):
     while queue:
         current = queue.popleft()
 
-        # Explore neighbors of the current city
+        # Explore neighbors
         for neighbor, time, cost in graph[current]:
 
             # If neighbor hasn't been visited, add to queue and mark parent
@@ -67,67 +64,6 @@ def bfs_all_paths(graph, start):
 
     return parent
 
-def cheapest_path(graph, start):
-    # Priority queue for Dijkstra's algorithm
-    queue = []
-    queue.append((0, start))  # (cost, city)
-
-    # Dictionary to track the minimum cost to reach each city
-    min_cost = {city: float('inf') for city in graph}
-    min_cost[start] = 0
-
-    parent = {}
-
-    while queue:
-        current_cost, current_city = queue.pop(0)
-
-        # If we have already found a cheaper path to current_city, skip
-        if current_cost > min_cost[current_city]:
-            continue
-
-        # Explore neighbors of the current city
-        for neighbor, time, cost in graph[current_city]:
-
-            new_cost = current_cost + cost
-
-            # If a cheaper path to neighbor is found
-            if new_cost < min_cost[neighbor]:
-                min_cost[neighbor] = new_cost
-                parent[neighbor] = current_city
-                queue.append((new_cost, neighbor))
-
-    return parent
-
-def fastest_path(graph, start):
-    # Priority queue for Dijkstra's algorithm
-    queue = []
-    queue.append((0, start))  # (time, city)
-
-    # Dictionary to track the minimum time to reach each city
-    min_time = {city: float('inf') for city in graph}
-    min_time[start] = 0
-
-    parent = {}
-
-    while queue:
-        current_time, current_city = queue.pop(0)
-
-        # If we have already found a faster path to current_city, skip
-        if current_time > min_time[current_city]:
-            continue
-
-        # Explore neighbors of the current city
-        for neighbor, time, cost in graph[current_city]:
-
-            new_time = current_time + time
-
-            # If a faster path to neighbor is found
-            if new_time < min_time[neighbor]:
-                min_time[neighbor] = new_time
-                parent[neighbor] = current_city
-                queue.append((new_time, neighbor))
-
-    return parent
 
 # Making path from start to end using parent mapping
 def get_path(parent, start, end):
@@ -148,21 +84,47 @@ def get_path(parent, start, end):
     return tuple(path)
 
 
+# Djikstras algorithm, weighting is 1 for time, and 2 for cost.
+def dijkstra(graph, start, weight):
+    dist = {city: float('inf') for city in graph}
+    dist[start] = 0
+    parent = {}
+    visited = set()
+
+    while len(visited) < len(graph):
+        # Pick unvisited city with smallest distance
+        current = None
+        for city in graph:
+            if city not in visited:
+                if current is None or dist[city] < dist[current]:
+                    current = city
+
+        if dist[current] == float('inf'):
+            break  # for when you cant get to remaining cities
+
+        visited.add(current)
+
+        for neighbor, time, cost in graph[current]:
+            weight = time if weight == 1 else cost
+            new_dist = dist[current] + weight
+            if new_dist < dist[neighbor]:
+                dist[neighbor] = new_dist
+                parent[neighbor] = current
+
+    return parent
+
+
 # MAIN COMPUTATION: BFS for each city to find min stops to all others
 def compute_all_min_stops(graph):
     result = []
 
     # BFS for each city
     for i in range(1, 101):
-
-        # Get parent mapping from BFS for city i
         parent = bfs_all_paths(graph, i)  # ONE BFS per i
         row = []
 
-        # reconstruct paths to all other cities
+        # remake the paths to all other cities
         for j in range(1, 101):
-
-            # Only compute path if i and j are different
             if i != j:
                 path = get_path(parent, i, j)
                 row.append(path)
@@ -170,6 +132,7 @@ def compute_all_min_stops(graph):
         result.append(row)
 
     return result
+
 
 # Output function
 def write_output(data, filename):
@@ -191,7 +154,24 @@ def write_output(data, filename):
             f.write(", ".join(line) + "\n")
 
 
-# Main execution
+# Dijkstra for each city to find min-cost or min-time paths
+def compute_all_dijkstra(graph, weight):
+    result = []
+
+    for i in range(1, 101):
+        parent = dijkstra(graph, i, weight)
+        row = []
+
+        for j in range(1, 101):
+            if i != j:
+                path = get_path(parent, i, j)
+                row.append(path)
+
+        result.append(row)
+
+    return result
+
+
 
 # Load graph from flights.txt
 graph = load_flights("flights.txt")
@@ -201,3 +181,13 @@ data = compute_all_min_stops(graph)
 
 # Write output to file
 write_output(data, "minstops.txt")
+
+# Dijkstra for min cost and min time computations (xtra credit)
+
+
+# Algorithms implemented: BFS (min stops), Dijkstra (min time), Dijkstra (min cost)
+time_data = compute_all_dijkstra(graph, weight=1)
+write_output(time_data, "mintime.txt")
+
+cost_data = compute_all_dijkstra(graph, weight=2)
+write_output(cost_data, "mincost.txt")
